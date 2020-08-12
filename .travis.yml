@@ -4,7 +4,7 @@ sudo: true
 
 script: 
   - cd zeebe-aws-event-bridge-server
-  - mvn --settings maven-settings.xml clean package
+  - mvn --settings .maven-settings.xml clean package
   - cd ..
 
 services:
