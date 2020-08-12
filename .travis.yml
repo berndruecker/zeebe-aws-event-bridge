@@ -1,0 +1,28 @@
+language: java
+
+sudo: true
+
+script: 
+  - cd zeebe-aws-event-bridge-server
+  - mvn clean package
+  - cd ..
+
+services:
+  - docker
+
+cache:
+  directories:
+    - $HOME/.m2
+jdk:
+  - openjdk11
+os:
+  - linux
+
+branches:
+  only:
+    - master
+
+after_success:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker build -t berndruecker/zeebe-aws-event-bridge-server ./zeebe-aws-event-bridge-server/
+  - docker push berndruecker/zeebe-aws-event-bridge-server
