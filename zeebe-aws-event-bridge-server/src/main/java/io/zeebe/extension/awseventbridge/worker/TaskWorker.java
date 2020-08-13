@@ -23,23 +23,24 @@ import io.zeebe.client.impl.oauth.OAuthCredentialsProvider;
 import io.zeebe.client.impl.oauth.OAuthCredentialsProviderBuilder;
 import io.zeebe.extension.awseventbridge.AwsEventBridgeHelper;
 import io.zeebe.extension.awseventbridge.Constants;
+import io.zeebe.extension.awseventbridge.LogManager;
 import io.zeebe.extension.awseventbridge.data.BridgeConfig;
 
 public class TaskWorker implements JobHandler {
 
-  private final Logger logger = LoggerFactory.getLogger(TaskWorker.class);
-
   private AwsEventBridgeHelper ebHelper;
   private ObjectMapper mapper;
+  private LogManager logManager;
 
   private BridgeConfig bridgeConfig;
   private ZeebeClient client;
   private JobWorker worker;
 
-  public TaskWorker(BridgeConfig bridgeConfig, AwsEventBridgeHelper ebHelper, ObjectMapper mapper) {
+  public TaskWorker(BridgeConfig bridgeConfig, AwsEventBridgeHelper ebHelper, ObjectMapper mapper, LogManager logManager) {
     this.bridgeConfig = bridgeConfig;
     this.ebHelper = ebHelper;
     this.mapper = mapper;
+    this.logManager = logManager;
   }
 
   public void start() {
@@ -68,7 +69,7 @@ public class TaskWorker implements JobHandler {
 
   @Override
   public void handle(JobClient client, ActivatedJob job) throws Exception {
-    logger.info("Handling ServiceTask for AWS event bridge: " + job);
+    logManager.log(bridgeConfig, "Handling ServiceTask for AWS event bridge: " + job);
 
     AmazonEventBridgeAsync ebClient = ebHelper.getClient(bridgeConfig.getAwsRegion());
 
@@ -100,7 +101,7 @@ public class TaskWorker implements JobHandler {
     request.setEntries(Collections.singletonList(entry));
     PutPartnerEventsResult response = ebClient.putPartnerEvents(request);
 
-    logger.info("Sent event to AWS Event Bridge. Request: " + request + " | response : " + response);
+    logManager.log(bridgeConfig, "Sent event to AWS Event Bridge. Request: " + request + " | response : " + response);
 
     HashMap<String, Object> variables = new HashMap<String, Object>();
     // TODO: Name of variable??

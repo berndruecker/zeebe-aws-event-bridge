@@ -35,7 +35,7 @@ public class AddBridgeConfigController {
     ProcessInstance processInstance = engine.getRuntimeService().startProcessInstanceByKey( //
         Constants.PROCESS_KEY_ONBOARDING, Variables.createVariables().putValue(Constants.ONBOARDING_VAR_bridgeConfigEntity, config.getId()));
 
-    logger.debug("Started onboarding process " + processInstance + " for " + config);
+    logger.info("Started onboarding process " + processInstance + " for " + config);
   }
 
 }

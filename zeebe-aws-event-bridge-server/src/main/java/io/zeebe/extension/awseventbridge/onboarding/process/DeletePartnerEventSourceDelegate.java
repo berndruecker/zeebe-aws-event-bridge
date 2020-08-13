@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.zeebe.extension.awseventbridge.AwsEventBridgeHelper;
 import io.zeebe.extension.awseventbridge.Constants;
+import io.zeebe.extension.awseventbridge.LogManager;
 import io.zeebe.extension.awseventbridge.data.BridgeConfig;
 import io.zeebe.extension.awseventbridge.data.BridgeConfigRepository;
 import io.zeebe.extension.awseventbridge.worker.TaskWorker;
@@ -23,8 +24,6 @@ import io.zeebe.extension.awseventbridge.worker.TaskWorker;
 @Component
 public class DeletePartnerEventSourceDelegate implements JavaDelegate {
 
-  private final Logger logger = LoggerFactory.getLogger(TaskWorker.class);
-  
   @Autowired
   private AwsEventBridgeHelper ebHelper;
   
@@ -33,6 +32,9 @@ public class DeletePartnerEventSourceDelegate implements JavaDelegate {
   
   @Autowired
   private ObjectMapper mapper;
+
+  @Autowired
+  private LogManager logManager;
 
   @Override
   @Transactional
@@ -48,7 +50,7 @@ public class DeletePartnerEventSourceDelegate implements JavaDelegate {
     request.setName( ebHelper.getSourceUrl(bridgeConfig) );
     DeletePartnerEventSourceResult response = eventBridgeClient.deletePartnerEventSource(request );
     
-    logger.info("Deleted partner event source. Request: " + request + " | Response: " + response);
+    logManager.log(bridgeConfig, "Deleted partner event source. Request: " + request + " | Response: " + response);
    
     execution.setVariable(
         Constants.ONBOARDING_VAR_partnerEventSourceResponse, 

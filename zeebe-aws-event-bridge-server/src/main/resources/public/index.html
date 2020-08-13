@@ -62,7 +62,7 @@
 		  <h4>AWS Account</h4>	  
 		  <div class="form-group">
 		    <label for="awsAccountNumber">Account Number</label>
-		    <input type="text" class="form-control" id="awsAccountNumber" name="awsAccountNumber" >
+		    <input type="text" class="form-control" id="awsAccountNumber" name="awsAccountNumber">
 		  </div>
 		  <div class="form-group">
 		    <label for="awsRegion">Region</label>
@@ -85,20 +85,21 @@
     </div>
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
       <div class="card-body">
-		<form id="addBridgeConfigForm">
+		<form id="logBridgeConfigForm">
           <p>
             Access relevant logs for your event bridge.
           </p>
 			
 		  <div class="form-group">
-			<label for="zeebeClusterId">Zeebe Cluster Id</label>
-			<input type="text" class="form-control" id="zeebeClusterId" name="zeebeClusterId">
+			<label for="zeebeClusterId2">Zeebe Cluster Id</label>
+			<input type="text" class="form-control" id="zeebeClusterId2" name="zeebeClusterId">
 		  </div>
 		  <div class="form-group">
-		    <label for="zeebeClientId">AWS Account Number</label>
-			<input type="text" class="form-control" id="awsAccountNumber" name="awsAccountNumber">
+		    <label for="awsAccountNumber2">AWS Account Number</label>
+			<input type="text" class="form-control" id="awsAccountNumber2" name="awsAccountNumber">
 		  </div>
-		  <button type="button" id="OpenLogsBtn" class="btn btn-primary">Open Logs</button>
+		  <button type="button" id="OpenLogsBtn" class="btn btn-primary">Load Logs</button>
+		  <pre id="logs"></pre>
 		</form>
       </div>
     </div>
@@ -120,12 +121,12 @@
           </p>
 			
 		  <div class="form-group">
-			<label for="zeebeClusterId">Zeebe Cluster Id</label>
-			<input type="text" class="form-control" id="zeebeClusterId" name="zeebeClusterId">
+			<label for="zeebeClusterId3">Zeebe Cluster Id</label>
+			<input type="text" class="form-control" id="zeebeClusterId3" name="zeebeClusterId">
 		  </div>
 		  <div class="form-group">
-		    <label for="zeebeClientId">AWS Account Number</label>
-			<input type="text" class="form-control" id="awsAccountNumber" name="awsAccountNumber">
+		    <label for="awsAccountNumber3">AWS Account Number</label>
+			<input type="text" class="form-control" id="awsAccountNumber3" name="awsAccountNumber">
 		  </div>
 		  <button type="button" id="removeBridgeConfigBtn" class="btn btn-primary">Delete Bridge Config</button>
 		</form>
@@ -161,6 +162,18 @@ $("#removeBridgeConfigBtn").click(function(){
 	    }
 	});
 });   
+$("#OpenLogsBtn").click(function(){
+	$.ajax({
+	    url: "/BridgeConfig/" + $("#awsAccountNumber2").val() + "/" + $("#zeebeClusterId2").val() + "/logs",
+	    type: 'GET',
+	    success: function(result) {
+			console.log(result);
+			$("#logs").text(JSON.stringify(result, undefined, 4));
+	    }
+	});
+});   
+
+
   
 </script>
 </body>

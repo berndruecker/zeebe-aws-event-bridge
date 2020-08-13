@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.zeebe.extension.awseventbridge.AwsEventBridgeHelper;
+import io.zeebe.extension.awseventbridge.LogManager;
 import io.zeebe.extension.awseventbridge.data.BridgeConfig;
 import io.zeebe.extension.awseventbridge.data.BridgeConfigRepository;
 
@@ -31,6 +32,9 @@ public class WorkerRegistry {
   @Autowired
   private ObjectMapper mapper;
   
+  @Autowired
+  private LogManager logManager;
+
   private List<TaskWorker> workers = new ArrayList<TaskWorker>();
   
   @PostConstruct
@@ -55,11 +59,11 @@ public class WorkerRegistry {
     startWorker(bridgeConfig);
   }
 
-  private void startWorker(BridgeConfig bridgeEntity) {
-    TaskWorker taskWorker = new TaskWorker(bridgeEntity, ebHelper, mapper);
+  private void startWorker(BridgeConfig bridgeConfig) {
+    TaskWorker taskWorker = new TaskWorker(bridgeConfig, ebHelper, mapper, logManager);
     workers.add(taskWorker);
     taskWorker.start();
-    logger.info("Started worker: " + bridgeEntity);
+    logManager.log(bridgeConfig, "Started worker: " + bridgeConfig);
   }
 
   @PreDestroy
