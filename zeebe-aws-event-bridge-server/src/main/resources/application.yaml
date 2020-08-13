@@ -1,12 +1,14 @@
 spring:
-  datasource.url: jdbc:h2:file:./camunda-h2-database
+  datasource.url: jdbc:h2:file:./h2-db-zeebe-aws-event-bridge
   h2.console.enabled: true
   jpa.hibernate.ddl-auto: update
 
-camunda.bpm.admin-user:
-  id: demo
-  password: demo
+camunda.bpm:
+  admin-user:
+    id: demo
+    password: demo
+  webapp.index-redirect-enabled: false
   
 aws:
-  access_key_id: xxx
-  secret_access_key: yyy
+  access_key_id: x
+  secret_access_key: y
