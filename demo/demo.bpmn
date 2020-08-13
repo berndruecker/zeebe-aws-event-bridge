@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1fpyei2" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Zeebe Modeler" exporterVersion="0.9.1">
-  <bpmn:process id="test" name="test" isExecutable="true">
+  <bpmn:process id="demo" name="demo" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0h55kt1</bpmn:outgoing>
     </bpmn:startEvent>
@@ -29,7 +29,7 @@
     </bpmn:extensionElements>
   </bpmn:message>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="test">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="demo">
       <bpmndi:BPMNEdge id="SequenceFlow_0xpm3xb_di" bpmnElement="SequenceFlow_0xpm3xb">
         <di:waypoint x="498" y="117" />
         <di:waypoint x="595" y="117" />
