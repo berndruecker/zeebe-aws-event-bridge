@@ -5,7 +5,7 @@
 1. start the zeebe-aws-event-bridge-server
 
    ```bash
-   docker run -p 8080:8080 -e AWS_ACCESS_KEY_ID={CAMUNDA-PARTNER-ACCOUNT-AWS-ACCESS-KEY-ID} -e AWS_SECRET_ACCESS_KEY={CAMUNDA-PARTNER-ACCOUNT-AWS-AWS-SECRET-ACCESSKEY} berndruecker/zeebe-aws-event-bridge-server
+   docker run -p 8080:8080 -e AWS_ACCESS_KEY_ID={CAMUNDA-AWS-ACCESS-KEY-ID} -e AWS_SECRET_ACCESS_KEY={CAMUNDA-AWS-AWS-SECRET-ACCESSKEY} berndruecker/zeebe-aws-event-bridge-server
    ```
 
 ### steps to be taken by 'customer'
@@ -45,13 +45,18 @@
    - fill out the form with the client credentials obtained above from Camunda
      Cloud
    - use your own AWS account ID for the field "Account Number"
-   - click `add bridge config`. This will create a new partner event bus
-     [in your AWS account](https://eu-central-1.console.aws.amazon.com/events/home?region=eu-central-1#/eventbuses)
+   - click `add bridge config`. This will create a new partner event source
+     [in your AWS account](https://eu-central-1.console.aws.amazon.com/events/home?region=eu-central-1#/partners)
      that looks something like
      `aws.partner/camunda.com.test/ebtask/cb07421e-54a5-44a6-7542-b502ef088e42`
 
 1. configure your lambda to be triggered via EventBridge
 
+   - in your AWS console navigate to
+     `Amazon EventBridge > Events > Partner event sources`
+     [(link)](https://eu-central-1.console.aws.amazon.com/events/home?region=eu-central-1#/partners)
+   - select the partner event source that was created in the previous step and
+     click `Associate with event bus`.
    - in your AWS console navigate to `Amazon EventBridge > Events > Rules`
      [(link)](https://eu-central-1.console.aws.amazon.com/events/home?region=eu-central-1#/rules)
    - click on `create rule`
