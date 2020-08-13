@@ -27,3 +27,6 @@ hs_err_pid*
 /zeebe-aws-event-bridge-server/.gitignore
 .settings
 .project
+
+node_modules
+.DS_Store

@@ -1,21 +1,15 @@
 {
-  "name": "event-bridge-lambda-demo",
+  "name": "demo",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "startProcess.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "prettier": {
-    "trailingComma": "es5",
-    "tabWidth": 2,
-    "semi": false,
-    "singleQuote": true
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2"
+    "zeebe-node": "^0.23.3"
   }
 }

@@ -23,6 +23,7 @@ branches:
     - master
 
 after_success:
-  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - docker build -t berndruecker/zeebe-aws-event-bridge-server ./zeebe-aws-event-bridge-server/
-  - docker push berndruecker/zeebe-aws-event-bridge-server
+  - docker login -u _json_key -p "${GCR_JSON_KEY}" https://eu.gcr.io
+  - docker build -t zeebe-aws-event-bridge-server ./zeebe-aws-event-bridge-server/
+  - docker tag zeebe-aws-event-bridge-server eu.gcr.io/${GCP_PROJECT_NAME}/zeebe-aws-event-bridge-server
+  - docker push eu.gcr.io/${GCP_PROJECT_NAME}/zeebe-aws-event-bridge-server
