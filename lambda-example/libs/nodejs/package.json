@@ -1,0 +1,10 @@
+{
+  "requires": true,
+  "lockfileVersion": 1,
+  "dependencies": {
+    "zeebe-node": "^0.23.3"
+  },
+  "scripts": {
+    "postinstall": "docker run --rm -v ${PWD}:/var/task lambci/lambda:build-nodejs12.x npm rebuild segfault-handler && docker run --rm -v ${PWD}:/var/task lambci/lambda:build-nodejs12.x npm rebuild grpc"
+  }
+}

@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "docker run --rm -v \"$PWD\":/var/task lambci/lambda:build-nodejs12.x npm rebuild grpc --build-from-source"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "prettier": {
     "trailingComma": "es5",
@@ -17,7 +16,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2",
-    "zeebe-node": "^0.23.3"
+    "axios": "^0.19.2" 
   }
 }
