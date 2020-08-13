@@ -70,6 +70,13 @@
 		  </div>
 	
 		  <button type="button" id="addBridgeConfigBtn" class="btn btn-primary">Add Bridge Config</button>
+		  
+		  <div id="addSuccessMsg" class="alert alert-success" role="alert">
+		  	Wooho - we created the bridge for you!
+		  </div>		  
+		  <div id="addErrorMsg" class="alert alert-danger" role="alert">
+		  	Oh no - it failed!
+		  </div>		  
 		</form> 
 
       </div>
@@ -129,6 +136,12 @@
 			<input type="text" class="form-control" id="awsAccountNumber3" name="awsAccountNumber">
 		  </div>
 		  <button type="button" id="removeBridgeConfigBtn" class="btn btn-primary">Delete Bridge Config</button>
+		  <div id="removeSuccessMsg" class="alert alert-success" role="alert">
+		  	OK - we deleted the bridge for you!
+		  </div>		  
+		  <div id="removeErrorMsg" class="alert alert-danger" role="alert">
+		  	Oh no - it failed!
+		  </div>		
 		</form>
       </div>
     </div>
@@ -142,24 +155,44 @@
   
 <script>
 
+$('#addSuccessMsg').hide();
+$('#addErrorMsg').hide();
 $("#addBridgeConfigBtn").click(function(){
+    $('#addSuccessMsg').hide();
+    $('#addErrorMsg').hide();
 	$.ajax({
 	    url: '/BridgeConfig',
 	    type: 'PUT',
 	    data: $("#addBridgeConfigForm").serialize(),
 	    success: function(result) {
-	        alert("Got it - we added the config!");
+	    	$('#addSuccessMsg').show();
+	    	$('#addErrorMsg').hide();
+	    },
+	    error: function(xhr){
+	    	$('#addErrorMsg').text(xhr.responseJSON.message);
+	    	$('#addSuccessMsg').hide();
+	    	$('#addErrorMsg').show();
 	    }
 	});
 });   
+$('#removeSuccessMsg').hide();
+$('#removeErrorMsg').hide();
 $("#removeBridgeConfigBtn").click(function(){
+	$('#removeSuccessMsg').hide();
+	$('#removeErrorMsg').hide();
 	$.ajax({
 	    url: '/BridgeConfig',
 	    type: 'DELETE',
 	    data: $("#removeBridgeConfigForm").serialize(),
 	    success: function(result) {
-	        alert("Got it - we deleted the config!");
-	    }
+	    	$('#removeSuccessMsg').show();
+	    	$('#removeErrorMsg').hide();
+	    },
+	    error: function(xhr){
+	    	$('#removeErrorMsg').text(xhr.responseJSON.message);
+	    	$('#removeSuccessMsg').hide();
+	    	$('#removeErrorMsg').show();
+		}	    
 	});
 });   
 $("#OpenLogsBtn").click(function(){

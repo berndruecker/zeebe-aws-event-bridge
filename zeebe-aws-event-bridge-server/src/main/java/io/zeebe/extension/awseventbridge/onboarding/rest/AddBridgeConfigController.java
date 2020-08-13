@@ -2,6 +2,8 @@ package io.zeebe.extension.awseventbridge.onboarding.rest;
 
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
+import java.util.Iterator;
+
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.variable.Variables;
@@ -29,9 +31,12 @@ public class AddBridgeConfigController {
 
   @RequestMapping(path = "/BridgeConfig", method = PUT)
   public void createPartnerEventSource(BridgeConfig config) {
+    Iterator<BridgeConfig> configList = repo.findByZeebeClusterIdAndAwsAccountNumber(config.getZeebeClusterId(), config.getAwsAccountNumber()).iterator();
+    if (configList.hasNext()) {
+      throw new IllegalStateException("Found a bridge config already for this combination of account number and cluster id. Delete it first if you need to change it.");
+    }
 
     repo.save(config);
-
     ProcessInstance processInstance = engine.getRuntimeService().startProcessInstanceByKey( //
         Constants.PROCESS_KEY_ONBOARDING, Variables.createVariables().putValue(Constants.ONBOARDING_VAR_bridgeConfigEntity, config.getId()));
 
