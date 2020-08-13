@@ -1,40 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1fpyei2" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Zeebe Modeler" exporterVersion="0.9.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1fpyei2" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Zeebe Modeler" exporterVersion="0.9.1">
   <bpmn:process id="test" name="test" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0h55kt1</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_0h55kt1" sourceRef="StartEvent_1" targetRef="Activity_07mqr93" />
     <bpmn:endEvent id="Event_1uimugi">
-      <bpmn:incoming>Flow_16g2rdb</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0xpm3xb</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_16g2rdb" sourceRef="Activity_07mqr93" targetRef="Event_1uimugi" />
-    <bpmn:serviceTask id="Activity_07mqr93" name="Hello World">
+    <bpmn:sequenceFlow id="Flow_16g2rdb" sourceRef="Activity_07mqr93" targetRef="IntermediateCatchEvent_0eefpd6" />
+    <bpmn:serviceTask id="Activity_07mqr93" name="Invoke Lambda">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="aws-event-bridge" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0h55kt1</bpmn:incoming>
       <bpmn:outgoing>Flow_16g2rdb</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_0eefpd6" name="ACK">
+      <bpmn:incoming>Flow_16g2rdb</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0xpm3xb</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="Message_00p06zk" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0xpm3xb" sourceRef="IntermediateCatchEvent_0eefpd6" targetRef="Event_1uimugi" />
   </bpmn:process>
+  <bpmn:message id="Message_00p06zk" name="ACK">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=requestCorrelationId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="test">
-      <bpmndi:BPMNEdge id="Flow_0h55kt1_di" bpmnElement="Flow_0h55kt1">
-        <di:waypoint x="215" y="117" />
-        <di:waypoint x="270" y="117" />
+      <bpmndi:BPMNEdge id="SequenceFlow_0xpm3xb_di" bpmnElement="SequenceFlow_0xpm3xb">
+        <di:waypoint x="498" y="117" />
+        <di:waypoint x="595" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16g2rdb_di" bpmnElement="Flow_16g2rdb">
         <di:waypoint x="370" y="117" />
-        <di:waypoint x="432" y="117" />
+        <di:waypoint x="462" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0h55kt1_di" bpmnElement="Flow_0h55kt1">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="270" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="99" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1uimugi_di" bpmnElement="Event_1uimugi">
-        <dc:Bounds x="432" y="99" width="36" height="36" />
+        <dc:Bounds x="595" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="594" y="142" width="38" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_12hhiqk_di" bpmnElement="Activity_07mqr93">
         <dc:Bounds x="270" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="IntermediateCatchEvent_0eefpd6_di" bpmnElement="IntermediateCatchEvent_0eefpd6">
+        <dc:Bounds x="462" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="469" y="142" width="23" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
