@@ -23,3 +23,7 @@
 hs_err_pid*
 
 .vscode
+/zeebe-aws-event-bridge-server/.classpath
+/zeebe-aws-event-bridge-server/.gitignore
+.settings
+.project

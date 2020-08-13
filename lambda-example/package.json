@@ -1,0 +1,23 @@
+{
+  "name": "event-bridge-lambda-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "docker run --rm -v \"$PWD\":/var/task lambci/lambda:build-nodejs12.x npm rebuild grpc --build-from-source"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "zeebe-node": "^0.23.3"
+  }
+}
