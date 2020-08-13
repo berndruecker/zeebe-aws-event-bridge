@@ -71,6 +71,23 @@
 			<artifactId>aws-java-sdk-eventbridge</artifactId>
 		</dependency>
 	
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>webjars-locator</artifactId>
+		    <version>0.30</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>bootstrap</artifactId>
+		    <version>4.5.0</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>jquery</artifactId>
+		    <version>3.5.1</version>
+		</dependency>	
 
 	</dependencies>
 

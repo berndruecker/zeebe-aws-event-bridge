@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
+	
+	 <title>Zeebe AWS Event Bridge</title>
+</head>
+<body>
+ 
+<!--Navbar-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Zeebe / AWS Event Bridge Manager</a>
+</nav>
+<!--/.Navbar-->
+  
+  <div class="container">
+  
+<div id="accordion">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          New Event Bridge
+        </button>
+      </h5>
+    </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+      <div class="card-body">
+
+		<form id="addBridgeConfigForm" method="post">
+          <p>
+            Add a partner event source onto your AWS account. 
+            This allows to push an event to the AWS Event Bridge whenever there
+            is an appropriate service tasks in an automated BPMN process on Zeebe in Camunda Cloud.
+          </p>
+			
+		  <h4>Zeebe Cluster</h4>
+		  <div class="form-group">
+			<label for="zeebeClusterId">Cluster Id</label>
+			<input type="text" class="form-control" id="zeebeClusterId" name="zeebeClusterId">
+		  </div>
+		  <div class="form-group">
+		    <label for="zeebeClientId">Client Id</label>
+			<input type="text" class="form-control" id="zeebeClientId" name="zeebeClientId">
+		  </div>
+		  <div class="form-group">
+		    <label for="zeebeClientSecret">Client Secret</label>
+		    <input type="text" class="form-control" id="zeebeClientSecret" name="zeebeClientSecret">
+		  </div>
+		  <div class="form-group form-check">
+		  	<input type="checkbox" class="form-check-input" id="relayZeebeClientCredentials" name="relayZeebeClientCredentials" value="true" checked>
+		    <label for="relayZeebeClientCredentials">Relay Client Credentials in Header</label>
+	        <small id="relayZeebeClientCredentialsHelp" class="form-text text-muted">Add Camunda Cloud client credentials to event header. This allows to easily send acknowledge messages back to Camunda Cloud.</small>
+		  </div>
+	
+	
+		  <h4>AWS Account</h4>	  
+		  <div class="form-group">
+		    <label for="awsAccountNumber">Account Number</label>
+		    <input type="text" class="form-control" id="awsAccountNumber" name="awsAccountNumber">
+		  </div>
+		  <div class="form-group">
+		    <label for="awsRegion">Region</label>
+		    <input type="text" class="form-control" id="awsRegion" name="awsRegion" value="eu-central-1">
+		  </div>
+	
+		  <button type="button" id="addBridgeConfigBtn" class="btn btn-primary">Add Bridge Config</button>
+		</form> 
+
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingTwo">
+      <h5 class="mb-0">
+        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          Show Event Bridge Logs
+        </button>
+      </h5>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+      <div class="card-body">
+          <p>
+            Access relevant logs for your event bridge.
+          </p>
+			
+		  <div class="form-group">
+			<label for="zeebeClusterId">Zeebe Cluster Id</label>
+			<input type="text" class="form-control" id="zeebeClusterId" name="zeebeClusterId">
+		  </div>
+		  <div class="form-group">
+		    <label for="zeebeClientId">AWS Account Number</label>
+			<input type="text" class="form-control" id="awsAccountNumber" name="awsAccountNumber">
+		  </div>
+		  <button class="btn btn-primary">Open Logs</button>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingThree">
+      <h5 class="mb-0">
+        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          Remove Bridge Config
+        </button>
+      </h5>
+    </div>
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+      <div class="card-body">
+          <p>
+            Delete the AWS Partner Event Source and stop sending Zeebe events to it.
+            This does not affect your own mappings on the AWS side.
+          </p>
+			
+		  <div class="form-group">
+			<label for="zeebeClusterId">Zeebe Cluster Id</label>
+			<input type="text" class="form-control" id="zeebeClusterId" name="zeebeClusterId">
+		  </div>
+		  <div class="form-group">
+		    <label for="zeebeClientId">AWS Account Number</label>
+			<input type="text" class="form-control" id="awsAccountNumber" name="awsAccountNumber">
+		  </div>
+		  <button class="btn btn-primary">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>  
+  
+  
+  </div>
+  <script src="/webjars/jquery/jquery.min.js"></script>		
+  <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+  
+<script>
+
+$("#addBridgeConfigBtn").click(function(){        
+    $.post("/addBridgeConfig", $("#addBridgeConfigForm").serialize(), function(data) {
+        alert("Got it - we added the config!");
+    });
+});
+  
+</script>
+</body>
+</html>
