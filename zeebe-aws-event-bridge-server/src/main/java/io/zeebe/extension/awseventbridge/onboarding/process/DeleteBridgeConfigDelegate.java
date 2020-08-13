@@ -1,4 +1,4 @@
-package io.zeebe.extension.awseventbridge.onboarding.worker;
+package io.zeebe.extension.awseventbridge.onboarding.process;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -6,18 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import io.zeebe.extension.awseventbridge.Constants;
-import io.zeebe.extension.awseventbridge.worker.WorkerRegistry;
+import io.zeebe.extension.awseventbridge.data.BridgeConfigRepository;
 
 @Component
-public class StartWorkerDelegate implements JavaDelegate {
+public class DeleteBridgeConfigDelegate implements JavaDelegate {
   
   @Autowired
-  private WorkerRegistry registry;
+  private BridgeConfigRepository repo;
 
   @Override
   public void execute(DelegateExecution execution) throws Exception {
 
-    registry.startNewWorkerOnDemand((Long) execution.getVariable(Constants.ONBOARDING_VAR_bridgeConfigEntity));
+    repo.deleteById((Long) execution.getVariable(Constants.ONBOARDING_VAR_bridgeConfigEntity));
     
   }
 

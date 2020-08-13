@@ -108,4 +108,8 @@ public class TaskWorker implements JobHandler {
     client.newCompleteCommand(job.getKey()).variables(variables).send().join();
   }
 
+  public BridgeConfig getBridgeConfig() {
+    return bridgeConfig;
+  }
+
 }

@@ -5,5 +5,5 @@ docker run -p 8080:8080 -e AWS_ACCESS_KEY_ID=x -e AWS_SECRET_ACCESS_KEY=y berndr
 ```
 
 Goto
-* [http://localhost:8080/add.html](http://localhost:8080/add.html)
+* [http://localhost:8080/index.html](http://localhost:8080/index.html)
 * [http://localhost:8080/camunda/app/](http://localhost:8080/camunda/app/)

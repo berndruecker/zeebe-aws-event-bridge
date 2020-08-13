@@ -21,6 +21,10 @@ public class BridgeConfig {
   private String awsAccountNumber;
   private String awsRegion;
   
+  /**
+   * Per default a config is activle, but during deletion it might be inactive
+   */
+  private boolean active = true;
   
   public String getZeebeAudience() {
     return zeebeClusterId + ".zeebe.camunda.io";    
@@ -75,6 +79,12 @@ public class BridgeConfig {
   }
   public void setRelayZeebeClientCredentials(boolean relayZeebeClientCredentials) {
     this.relayZeebeClientCredentials = relayZeebeClientCredentials;
+  }
+  public boolean isActive() {
+    return active;
+  }
+  public void setActive(boolean active) {
+    this.active = active;
   }
   
 }

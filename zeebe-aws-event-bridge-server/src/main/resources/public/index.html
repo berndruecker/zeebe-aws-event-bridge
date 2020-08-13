@@ -32,7 +32,7 @@
     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
       <div class="card-body">
 
-		<form id="addBridgeConfigForm" method="post">
+		<form id="addBridgeConfigForm">
           <p>
             Add a partner event source onto your AWS account. 
             This allows to push an event to the AWS Event Bridge whenever there
@@ -62,7 +62,7 @@
 		  <h4>AWS Account</h4>	  
 		  <div class="form-group">
 		    <label for="awsAccountNumber">Account Number</label>
-		    <input type="text" class="form-control" id="awsAccountNumber" name="awsAccountNumber">
+		    <input type="text" class="form-control" id="awsAccountNumber" name="awsAccountNumber" >
 		  </div>
 		  <div class="form-group">
 		    <label for="awsRegion">Region</label>
@@ -85,6 +85,7 @@
     </div>
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
       <div class="card-body">
+		<form id="addBridgeConfigForm">
           <p>
             Access relevant logs for your event bridge.
           </p>
@@ -97,7 +98,8 @@
 		    <label for="zeebeClientId">AWS Account Number</label>
 			<input type="text" class="form-control" id="awsAccountNumber" name="awsAccountNumber">
 		  </div>
-		  <button class="btn btn-primary">Open Logs</button>
+		  <button type="button" id="OpenLogsBtn" class="btn btn-primary">Open Logs</button>
+		</form>
       </div>
     </div>
   </div>
@@ -111,6 +113,7 @@
     </div>
     <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
       <div class="card-body">
+		<form id="removeBridgeConfigForm">
           <p>
             Delete the AWS Partner Event Source and stop sending Zeebe events to it.
             This does not affect your own mappings on the AWS side.
@@ -124,7 +127,8 @@
 		    <label for="zeebeClientId">AWS Account Number</label>
 			<input type="text" class="form-control" id="awsAccountNumber" name="awsAccountNumber">
 		  </div>
-		  <button class="btn btn-primary">Delete</button>
+		  <button type="button" id="removeBridgeConfigBtn" class="btn btn-primary">Delete Bridge Config</button>
+		</form>
       </div>
     </div>
   </div>
@@ -137,11 +141,26 @@
   
 <script>
 
-$("#addBridgeConfigBtn").click(function(){        
-    $.post("/addBridgeConfig", $("#addBridgeConfigForm").serialize(), function(data) {
-        alert("Got it - we added the config!");
-    });
-});
+$("#addBridgeConfigBtn").click(function(){
+	$.ajax({
+	    url: '/BridgeConfig',
+	    type: 'PUT',
+	    data: $("#addBridgeConfigForm").serialize(),
+	    success: function(result) {
+	        alert("Got it - we added the config!");
+	    }
+	});
+});   
+$("#removeBridgeConfigBtn").click(function(){
+	$.ajax({
+	    url: '/BridgeConfig',
+	    type: 'DELETE',
+	    data: $("#removeBridgeConfigForm").serialize(),
+	    success: function(result) {
+	        alert("Got it - we deleted the config!");
+	    }
+	});
+});   
   
 </script>
 </body>

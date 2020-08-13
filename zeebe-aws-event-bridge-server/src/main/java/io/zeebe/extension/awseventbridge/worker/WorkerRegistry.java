@@ -40,18 +40,19 @@ public class WorkerRegistry {
     logger.info("Starting Workers: " + bridgeList);
     
     for (BridgeConfig bridgeConfig : bridgeList) {
-      try {
-        startWorker(bridgeConfig);
-      } catch (Exception ex) {
-        logger.error("Could not start worker " + bridgeConfig);
-        ex.printStackTrace();
+      if (bridgeConfig.isActive()) {
+        try {
+          startWorker(bridgeConfig);
+        } catch (Exception ex) {
+          logger.error("Could not start worker " + bridgeConfig, ex);
+        }
       }
     }
   }
   
-  public void startNewWorkerOnDemand(long eventBridgeId) {
-    BridgeConfig bridgeEntity = repo.findById(eventBridgeId);
-    startWorker(bridgeEntity);
+  public void startNewWorkerOnDemand(long bridgeConfigId) {
+    BridgeConfig bridgeConfig = repo.findById(bridgeConfigId);
+    startWorker(bridgeConfig);
   }
 
   private void startWorker(BridgeConfig bridgeEntity) {
@@ -71,6 +72,23 @@ public class WorkerRegistry {
         ex.printStackTrace();
       }
     }
+  }
+  
+  private TaskWorker findWorker(long bridgeConfigId) {
+    for (TaskWorker worker : workers) {
+      if (worker.getBridgeConfig().getId() == bridgeConfigId) {
+        return worker;
+      }
+    }
+    return null;
+  }
+
+  public void stopAndRetireWorker(Long bridgeConfigId) {
+    TaskWorker worker = findWorker(bridgeConfigId);
+    worker.stop();
+    
+    BridgeConfig bridgeConfig = repo.findById(bridgeConfigId).get();
+    bridgeConfig.setActive(false);
   }
 
 }

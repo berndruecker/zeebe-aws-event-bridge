@@ -1,6 +1,6 @@
 package io.zeebe.extension.awseventbridge.onboarding.rest;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
@@ -27,13 +27,13 @@ public class AddBridgeConfigController {
   @Autowired
   private ProcessEngine engine;
 
-  @RequestMapping(path = "/addBridgeConfig", method = POST)
+  @RequestMapping(path = "/BridgeConfig", method = PUT)
   public void createPartnerEventSource(BridgeConfig config) {
 
     repo.save(config);
 
     ProcessInstance processInstance = engine.getRuntimeService().startProcessInstanceByKey( //
-        Constants.ONBOARDING_PROCESS_KEY, Variables.createVariables().putValue(Constants.ONBOARDING_VAR_bridgeConfigEntity, config.getId()));
+        Constants.PROCESS_KEY_ONBOARDING, Variables.createVariables().putValue(Constants.ONBOARDING_VAR_bridgeConfigEntity, config.getId()));
 
     logger.debug("Started onboarding process " + processInstance + " for " + config);
   }

@@ -1,4 +1,4 @@
-package io.zeebe.extension.awseventbridge.onboarding.worker;
+package io.zeebe.extension.awseventbridge.onboarding.process;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
