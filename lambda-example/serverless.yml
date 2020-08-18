@@ -49,6 +49,7 @@ provider:
   # you can define service wide environment variables here
   environment:
     HOME: /tmp
+    ZEEBE_NODE_LOG_LEVEL: DEBUG
 
 # you can add packaging information here
 #package:

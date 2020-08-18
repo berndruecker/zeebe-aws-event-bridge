@@ -17,7 +17,7 @@ module.exports.main = async event => {
   }
 
   //tell zeebe that we're done:
-  zbHelper.confirmTaskCompletion(event, { jokeOfTheDay })
+  await zbHelper.confirmTaskCompletion(event, { jokeOfTheDay })
 
   return {
     jokeOfTheDay,

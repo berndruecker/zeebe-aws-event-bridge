@@ -48,7 +48,7 @@ const getOrCreateZbClient = function ({ clientId, clientSecret, clusterId }) {
   return clients[clientId]
 }
 
-module.exports.confirmTaskCompletion = function (
+module.exports.confirmTaskCompletion = async function (
   AwsEventBridgeEvent,
   variables = {}
 ) {
@@ -61,11 +61,17 @@ module.exports.confirmTaskCompletion = function (
 
   const zbc = getOrCreateZbClient({ clientId, clientSecret, clusterId })
 
-  zbc.publishMessage({
+  const msg = {
     correlationKey,
     messageId: AwsEventBridgeEvent.id,
     name: 'ACK',
     variables,
     timeToLive: Duration.seconds.of(30), // seconds
-  })
+  }
+
+  //console.log('publishing message: ', msg)
+
+  await zbc.publishMessage(msg)
+
+  return msg
 }
