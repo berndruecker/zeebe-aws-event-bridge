@@ -12,6 +12,7 @@ import com.amazonaws.services.eventbridge.AmazonEventBridgeAsync;
 import com.amazonaws.services.eventbridge.model.PutPartnerEventsRequest;
 import com.amazonaws.services.eventbridge.model.PutPartnerEventsRequestEntry;
 import com.amazonaws.services.eventbridge.model.PutPartnerEventsResult;
+import com.amazonaws.services.eventbridge.model.PutPartnerEventsResultEntry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.zeebe.client.ZeebeClient;
@@ -102,12 +103,26 @@ public class TaskWorker implements JobHandler {
 
     request.setEntries(Collections.singletonList(entry));
     PutPartnerEventsResult response = ebClient.putPartnerEvents(request);
-
+    
     logManager.log(bridgeConfig, "Sent event to AWS Event Bridge. Request: " + request + " | response : " + response);
-
-    HashMap<String, Object> variables = new HashMap<String, Object>();
-    variables.put(bpmnTaskId + "-correlation-key", requestCorrelationId);
-    client.newCompleteCommand(job.getKey()).variables(variables).send().join();
+    
+    if (response.getFailedEntryCount()>0) {
+      PutPartnerEventsResultEntry firstResultEntry = response.getEntries().get(0); // as we limit it to one request at the moment
+      if (firstResultEntry.getErrorMessage()!= null && firstResultEntry.getErrorMessage().contains("Partner event source does not exist")) {
+        client.newThrowErrorCommand(job.getKey()) //
+          .errorCode("PARTNER_EVENT_SOURCE_NONEXISTANT")
+          .errorMessage(firstResultEntry.getErrorMessage())
+          .send().join();
+      } else {
+        // TODO: Double check the exception does what I think it should do (retry -> incident)
+        throw new RuntimeException("Exception while pushing event to AWS Event Bridge: " + firstResultEntry.getErrorMessage());
+      }
+    } else {  
+      HashMap<String, Object> variables = new HashMap<String, Object>();
+      variables.put(bpmnTaskId + "-correlation-key", requestCorrelationId);
+      client.newCompleteCommand(job.getKey()) //
+        .variables(variables).send().join();
+    }
   }
 
   public BridgeConfig getBridgeConfig() {
