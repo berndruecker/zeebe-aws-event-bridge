@@ -77,11 +77,13 @@ public class TaskWorker implements JobHandler {
 
     Details details = new Details();
 
+    String bpmnTaskId = job.getElementId();
     details.getHeader() //
         .setCallbackEndpoint(bridgeConfig.getZeebeBrokerEndpoint()) //
         .setCamundaCloudClusterId(bridgeConfig.getZeebeClusterId()) //
         .setCamundaCloudJobKey(job.getKey()) //
-        .setRequestCorrelationId(requestCorrelationId);
+        .setRequestCorrelationId(requestCorrelationId)
+        .setBpmnTaskId(bpmnTaskId);
     if (bridgeConfig.isRelayZeebeClientCredentials()) {
       details.getHeader() //
           .setCamundaCloudClientId(bridgeConfig.getZeebeClientId()).setCamundaCloudClientSecret(bridgeConfig.getZeebeClientSecret());
@@ -94,7 +96,7 @@ public class TaskWorker implements JobHandler {
     PutPartnerEventsRequest request = new PutPartnerEventsRequest();
     PutPartnerEventsRequestEntry entry = new PutPartnerEventsRequestEntry();
     entry.setDetail(detailsJson);
-    entry.setDetailType("TODO");
+    entry.setDetailType(Constants.EVENT_TYPE_NAME);
     entry.setSource(ebHelper.getSourceUrl(bridgeConfig));
     entry.setTime(new Date());
 
@@ -104,8 +106,7 @@ public class TaskWorker implements JobHandler {
     logManager.log(bridgeConfig, "Sent event to AWS Event Bridge. Request: " + request + " | response : " + response);
 
     HashMap<String, Object> variables = new HashMap<String, Object>();
-    // TODO: Name of variable??
-    variables.put("requestCorrelationId", requestCorrelationId);
+    variables.put(bpmnTaskId + "-correlation-key", requestCorrelationId);
     client.newCompleteCommand(job.getKey()).variables(variables).send().join();
   }
 

@@ -9,5 +9,6 @@ public class Constants {
   public static final String ONBOARDING_VAR_partnerEventSourceResponse = "partnerEventSourceResponse";
   
   public static final String JOB_TYPE = "aws-event-bridge";
+  public static final String EVENT_TYPE_NAME = "zeebe-task";
 
 }

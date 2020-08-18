@@ -10,6 +10,8 @@ public class Header {
   private String camundaCloudClientId;
   private String camundaCloudClientSecret;
   
+  private String bpmnTaskId;
+  
   public String getRequestCorrelationId() {
     return requestCorrelationId;
   }
@@ -50,6 +52,13 @@ public class Header {
   }
   public Header setCamundaCloudClientSecret(String camundaCloudClientSecret) {
     this.camundaCloudClientSecret = camundaCloudClientSecret;
+    return this;
+  }
+  public String getBpmnTaskId() {
+    return bpmnTaskId;
+  }
+  public Header setBpmnTaskId(String bpmnTaskId) {
+    this.bpmnTaskId = bpmnTaskId;
     return this;
   }
 

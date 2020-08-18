@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1fpyei2" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Zeebe Modeler" exporterVersion="0.9.1">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1fpyei2" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Zeebe Modeler" exporterVersion="0.9.0">
   <bpmn:process id="demo" name="demo" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0h55kt1</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_0h55kt1" sourceRef="StartEvent_1" targetRef="Activity_07mqr93" />
+    <bpmn:sequenceFlow id="Flow_0h55kt1" sourceRef="StartEvent_1" targetRef="invoke-lambda" />
     <bpmn:endEvent id="Event_1uimugi">
       <bpmn:incoming>SequenceFlow_0xpm3xb</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_16g2rdb" sourceRef="Activity_07mqr93" targetRef="IntermediateCatchEvent_0eefpd6" />
-    <bpmn:serviceTask id="Activity_07mqr93" name="Invoke Lambda">
+    <bpmn:sequenceFlow id="Flow_16g2rdb" sourceRef="invoke-lambda" targetRef="IntermediateCatchEvent_0eefpd6" />
+    <bpmn:serviceTask id="invoke-lambda" name="Invoke Lambda">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="aws-event-bridge" />
       </bpmn:extensionElements>
@@ -25,7 +25,7 @@
   </bpmn:process>
   <bpmn:message id="Message_00p06zk" name="ACK">
     <bpmn:extensionElements>
-      <zeebe:subscription correlationKey="=requestCorrelationId" />
+      <zeebe:subscription correlationKey="=invoke-lambda-correlation-key" />
     </bpmn:extensionElements>
   </bpmn:message>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -51,7 +51,7 @@
           <dc:Bounds x="594" y="142" width="38" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_12hhiqk_di" bpmnElement="Activity_07mqr93">
+      <bpmndi:BPMNShape id="Activity_12hhiqk_di" bpmnElement="invoke-lambda">
         <dc:Bounds x="270" y="77" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="IntermediateCatchEvent_0eefpd6_di" bpmnElement="IntermediateCatchEvent_0eefpd6">
