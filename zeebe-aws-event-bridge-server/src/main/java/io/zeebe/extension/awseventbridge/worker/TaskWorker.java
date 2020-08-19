@@ -36,12 +36,14 @@ public class TaskWorker implements JobHandler {
   private BridgeConfig bridgeConfig;
   private ZeebeClient client;
   private JobWorker worker;
+  private WorkerRegistry workerRegistry;
 
-  public TaskWorker(BridgeConfig bridgeConfig, AwsEventBridgeHelper ebHelper, ObjectMapper mapper, LogManager logManager) {
+  public TaskWorker(BridgeConfig bridgeConfig, AwsEventBridgeHelper ebHelper, ObjectMapper mapper, LogManager logManager, WorkerRegistry registry) {
     this.bridgeConfig = bridgeConfig;
     this.ebHelper = ebHelper;
     this.mapper = mapper;
     this.logManager = logManager;
+    this.workerRegistry = registry;
   }
 
   public void start() {
@@ -103,23 +105,29 @@ public class TaskWorker implements JobHandler {
 
     request.setEntries(Collections.singletonList(entry));
     PutPartnerEventsResult response = ebClient.putPartnerEvents(request);
-    
-    logManager.log(bridgeConfig, "Sent event to AWS Event Bridge. Request: " + request + " | response : " + response);
-    
+        
     if (response.getFailedEntryCount()>0) {
       PutPartnerEventsResultEntry firstResultEntry = response.getEntries().get(0); // as we limit it to one request at the moment
       if (firstResultEntry.getErrorMessage()!= null && firstResultEntry.getErrorMessage().contains("Partner event source does not exist")) {
+        logManager.log(bridgeConfig, "Could not send event to AWS Event Bridge as partner event source does not exist. Removing Worker! Request: " + request + " | response : " + response);
+        
+        workerRegistry.stopAndRetireWorker(bridgeConfig.getId());
+        
         client.newThrowErrorCommand(job.getKey()) //
           .errorCode("PARTNER_EVENT_SOURCE_NONEXISTANT")
           .errorMessage(firstResultEntry.getErrorMessage())
           .send().join();
       } else {
+        logManager.log(bridgeConfig, "Failure while sending event to AWS Event Bridge. Request: " + request + " | response : " + response);
         // TODO: Double check the exception does what I think it should do (retry -> incident)
         throw new RuntimeException("Exception while pushing event to AWS Event Bridge: " + firstResultEntry.getErrorMessage());
       }
     } else {  
+      logManager.log(bridgeConfig, "Sent event to AWS Event Bridge. Request: " + request + " | response : " + response);
       HashMap<String, Object> variables = new HashMap<String, Object>();
+      
       variables.put(bpmnTaskId + "-correlation-key", requestCorrelationId);
+      
       client.newCompleteCommand(job.getKey()) //
         .variables(variables).send().join();
     }

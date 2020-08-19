@@ -60,7 +60,7 @@ public class WorkerRegistry {
   }
 
   private void startWorker(BridgeConfig bridgeConfig) {
-    TaskWorker taskWorker = new TaskWorker(bridgeConfig, ebHelper, mapper, logManager);
+    TaskWorker taskWorker = new TaskWorker(bridgeConfig, ebHelper, mapper, logManager, this);
     workers.add(taskWorker);
     taskWorker.start();
     logManager.log(bridgeConfig, "Started worker: " + bridgeConfig);
