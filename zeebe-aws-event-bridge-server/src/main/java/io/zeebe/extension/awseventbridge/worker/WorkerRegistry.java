@@ -2,6 +2,7 @@ package io.zeebe.extension.awseventbridge.worker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -89,10 +90,14 @@ public class WorkerRegistry {
 
   public void stopAndRetireWorker(Long bridgeConfigId) {
     TaskWorker worker = findWorker(bridgeConfigId);
-    worker.stop();
+    if (worker != null) {
+      worker.stop();
+    }
     
-    BridgeConfig bridgeConfig = repo.findById(bridgeConfigId).get();
-    bridgeConfig.setActive(false);
+    Optional<BridgeConfig> bridgeConfig = repo.findById(bridgeConfigId);
+    if (bridgeConfig.isPresent()) {
+      bridgeConfig.get().setActive(false);
+    }
   }
 
 }
