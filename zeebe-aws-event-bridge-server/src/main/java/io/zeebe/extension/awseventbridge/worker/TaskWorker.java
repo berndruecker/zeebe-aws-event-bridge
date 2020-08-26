@@ -126,11 +126,15 @@ public class TaskWorker implements JobHandler {
       logManager.log(bridgeConfig, "Sent event to AWS Event Bridge. Request: " + request + " | response : " + response);
       HashMap<String, Object> variables = new HashMap<String, Object>();
       
-      variables.put(bpmnTaskId + "-correlation-key", requestCorrelationId);
+      variables.put(createCorrelationVariableName(bpmnTaskId), requestCorrelationId);
       
       client.newCompleteCommand(job.getKey()) //
         .variables(variables).send().join();
     }
+  }
+
+  private String createCorrelationVariableName(String bpmnTaskId) {
+    return bpmnTaskId.replaceAll("-",  "_") + "_correlation_key";
   }
 
   public BridgeConfig getBridgeConfig() {

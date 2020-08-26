@@ -25,7 +25,7 @@
   </bpmn:process>
   <bpmn:message id="Message_00p06zk" name="ACK">
     <bpmn:extensionElements>
-      <zeebe:subscription correlationKey="=invoke-lambda-correlation-key" />
+      <zeebe:subscription correlationKey="=invoke_lambda_correlation_key" />
     </bpmn:extensionElements>
   </bpmn:message>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
