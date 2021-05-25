@@ -44,11 +44,11 @@
 			<version>7.13.3-ee</version>
 		</dependency>
 		
-<dependency>
-  <groupId>io.zeebe</groupId>
-  <artifactId>zeebe-client-java</artifactId>
-  <version>0.24.0</version>
-</dependency>	
+		<dependency>
+		  <groupId>io.camunda</groupId>
+		  <artifactId>zeebe-client-java</artifactId>
+		  <version>1.0.0</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

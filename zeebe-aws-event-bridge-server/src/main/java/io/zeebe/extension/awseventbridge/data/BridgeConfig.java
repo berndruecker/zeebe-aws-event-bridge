@@ -29,7 +29,7 @@ public class BridgeConfig {
   public String getZeebeAudience() {
     return zeebeClusterId + ".zeebe.camunda.io";    
   }
-  public String getZeebeBrokerEndpoint() {
+  public String getZeebeGatewayAddress() {
     return getZeebeAudience() + ":443";
   }
 

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
+import io.camunda.zeebe.client.ZeebeClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,13 +16,12 @@ import com.amazonaws.services.eventbridge.model.PutPartnerEventsResult;
 import com.amazonaws.services.eventbridge.model.PutPartnerEventsResultEntry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.zeebe.client.ZeebeClient;
-import io.zeebe.client.api.response.ActivatedJob;
-import io.zeebe.client.api.worker.JobClient;
-import io.zeebe.client.api.worker.JobHandler;
-import io.zeebe.client.api.worker.JobWorker;
-import io.zeebe.client.impl.oauth.OAuthCredentialsProvider;
-import io.zeebe.client.impl.oauth.OAuthCredentialsProviderBuilder;
+import io.camunda.zeebe.client.api.response.ActivatedJob;
+import io.camunda.zeebe.client.api.worker.JobClient;
+import io.camunda.zeebe.client.api.worker.JobHandler;
+import io.camunda.zeebe.client.api.worker.JobWorker;
+import io.camunda.zeebe.client.impl.oauth.OAuthCredentialsProvider;
+import io.camunda.zeebe.client.impl.oauth.OAuthCredentialsProviderBuilder;
 import io.zeebe.extension.awseventbridge.AwsEventBridgeHelper;
 import io.zeebe.extension.awseventbridge.Constants;
 import io.zeebe.extension.awseventbridge.LogManager;
@@ -54,7 +54,7 @@ public class TaskWorker implements JobHandler {
         .build();
 
     client = ZeebeClient.newClientBuilder() //
-        .brokerContactPoint(bridgeConfig.getZeebeBrokerEndpoint()) //
+        .gatewayAddress(bridgeConfig.getZeebeGatewayAddress()) //
         .credentialsProvider(cred) //
         .build();
 
@@ -82,7 +82,7 @@ public class TaskWorker implements JobHandler {
 
     String bpmnTaskId = job.getElementId();
     details.getHeader() //
-        .setCallbackEndpoint(bridgeConfig.getZeebeBrokerEndpoint()) //
+        .setCallbackEndpoint(bridgeConfig.getZeebeGatewayAddress()) //
         .setCamundaCloudClusterId(bridgeConfig.getZeebeClusterId()) //
         .setCamundaCloudJobKey(job.getKey()) //
         .setRequestCorrelationId(requestCorrelationId)
